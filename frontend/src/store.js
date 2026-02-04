@@ -1,3 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import activitiesReducer from './features/activities/activitiesSlice';
-export default configureStore({ reducer: { activities: activitiesReducer } });
+
+const store = configureStore({
+  reducer: { activities: activitiesReducer } 
+});
+
+if (import.meta.env.DEV) {
+  window.store = store;
+}
+
+export default store;
