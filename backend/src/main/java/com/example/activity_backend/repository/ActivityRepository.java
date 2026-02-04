@@ -1,0 +1,10 @@
+package com.example.activity_backend.repository;
+
+import com.example.activity_backend.entity.Activity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ActivityRepository extends JpaRepository<Activity, Long> {
+
+}

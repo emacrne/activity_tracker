@@ -1,0 +1,14 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+# normalize text files (store LF in repo)
+* text=auto
+
+# keep scripts on each platform
+*.sh    eol=lf
+*.bat   eol=crlf
+*.cmd   eol=crlf
+
+# binaries
+*.png   binary
+*.jpg   binary
+*.jar   binary
