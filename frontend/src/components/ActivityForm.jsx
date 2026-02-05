@@ -4,6 +4,7 @@ import styles from './styles/ActivityForm.module.css';
 export default function ActivityForm({ onAdd }) {
   const [form, setForm] = useState({ name: '', description: '', date: '', durationHours: '' });
   const [error, setError] = useState('');
+  const [status, setStatus] = useState('idle');
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -13,20 +14,20 @@ export default function ActivityForm({ onAdd }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    if (!form.name || !form.date || !form.durationHours) {
+    setStatus('loading');
+    if (!form.name || !form.date || form.durationHours === '' || form.durationHours === null) {
       setError('Name, date and duration are required.');
       return;
     }
-    // normalize to nearest 0.5 hour step
     const raw = Number(form.durationHours);
-    const dur = Math.round(raw * 2) / 2;
-    if (isNaN(dur) || dur < 0.5) {
-      setError('Duration must be at least 0.5 hours');
+    if (isNaN(raw) || raw <= 0) {
+      setError('Duration must be a positive number');
       return;
     }
-    const payload = { ...form, durationHours: dur };
+    const payload = { ...form, durationHours: raw };
     await onAdd(payload);
     setForm({ name: '', description: '', date: '', durationHours: '' });
+    setStatus('idle');
   }
 
   return (
@@ -43,14 +44,16 @@ export default function ActivityForm({ onAdd }) {
         </label>
 
         <label className={styles.label}>Duration (hours)
-          <input className={styles.input} name="durationHours" type="number" min="0.5" step="0.5" value={form.durationHours} onChange={handleChange} />
+          <input className={styles.input} name="durationHours" type="number" min="0" step="any" value={form.durationHours} onChange={handleChange} />
         </label>
 
         <label className={styles.label}>Description
           <textarea className={styles.textarea} name="description" value={form.description} onChange={handleChange} />
         </label>
 
-        <div className={styles.formActions}><button type="submit">Add</button></div>
+        <div className={styles.formActions}>
+          <button type="submit" disabled={status === 'loading'}>Add</button>
+        </div>
       </form>
     </section>
   );

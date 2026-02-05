@@ -7,9 +7,7 @@ public class ActivityMapper {
   public static ActivityDto toDto(Activity a) {
     if (a == null)
       return null;
-    Double hours = null;
-    if (a.getDurationMinutes() != null)
-      hours = a.getDurationMinutes() / 60.0;
+    Double hours = a.getDurationHours();
     return new ActivityDto(a.getId(), a.getName(), a.getDescription(), a.getDate(), hours);
   }
 
@@ -21,9 +19,7 @@ public class ActivityMapper {
     a.setName(d.getName());
     a.setDescription(d.getDescription());
     a.setDate(d.getDate());
-    if (d.getDurationHours() != null) {
-      a.setDurationMinutes((int) Math.round(d.getDurationHours() * 60));
-    }
+    a.setDurationHours(d.getDurationHours());
     return a;
   }
 }

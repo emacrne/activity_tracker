@@ -22,17 +22,17 @@ public class Activity {
   @Column(length = 2000)
   private String description;
 
-  private Integer durationMinutes;
+  private Double durationHours;
 
   public Activity() {
   }
 
-  public Activity(String name, LocalDate date, String type, String description, Integer durationMinutes) {
+  public Activity(String name, LocalDate date, String type, String description, Double durationHours) {
     this.name = name;
     this.date = date;
     this.type = type;
     this.description = description;
-    this.durationMinutes = durationMinutes;
+    this.durationHours = durationHours;
   }
 
   public Long getId() {
@@ -75,11 +75,11 @@ public class Activity {
     this.description = description;
   }
 
-  public Integer getDurationMinutes() {
-    return durationMinutes;
+  public Double getDurationHours() {
+    return durationHours;
   }
 
-  public void setDurationMinutes(Integer durationMinutes) {
-    this.durationMinutes = durationMinutes;
+  public void setDurationHours(Double durationHours) {
+    this.durationHours = durationHours;
   }
 }

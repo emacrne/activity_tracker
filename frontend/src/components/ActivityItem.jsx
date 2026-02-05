@@ -2,9 +2,14 @@ import React from 'react';
 import styles from './styles/ActivityItem.module.css';
 
 export default React.memo(function ActivityItem({ activity, onDelete }) {
-  const hoursText = activity.durationHours
-    ? `${activity.durationHours} h`
-    : (activity.durationMinutes ? `${(activity.durationMinutes / 60).toFixed(1)} h` : '');
+  const hoursText = (() => {
+    const raw = activity.durationHours ?? (activity.durationMinutes ? activity.durationMinutes / 60 : null);
+    if (raw === null || raw === undefined) return '';
+    const n = Number(raw);
+    if (Number.isNaN(n)) return '';
+    const fmt = String(+n.toFixed(2));
+    return `${fmt} h`;
+  })();
 
   return (
     <li className={styles.activity}>
