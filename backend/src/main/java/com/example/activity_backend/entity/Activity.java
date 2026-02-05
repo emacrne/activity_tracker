@@ -17,8 +17,6 @@ public class Activity {
 
   private LocalDate date;
 
-  private String type;
-
   @Column(length = 2000)
   private String description;
 
@@ -27,10 +25,9 @@ public class Activity {
   public Activity() {
   }
 
-  public Activity(String name, LocalDate date, String type, String description, Double durationHours) {
+  public Activity(String name, LocalDate date, String description, Double durationHours) {
     this.name = name;
     this.date = date;
-    this.type = type;
     this.description = description;
     this.durationHours = durationHours;
   }
@@ -58,15 +55,6 @@ public class Activity {
   public void setDate(LocalDate date) {
     this.date = date;
   }
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-
   public String getDescription() {
     return description;
   }
