@@ -52,7 +52,7 @@ export default function ActivityForm({ onAdd }) {
         </label>
 
         <div className={styles.formActions}>
-          <button type="submit" disabled={status === 'loading'}>Add</button>
+          <button type="submit" disabled={status === 'loading'} className={styles.btnUpdate}>Add</button>
         </div>
       </form>
     </section>

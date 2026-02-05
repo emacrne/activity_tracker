@@ -13,6 +13,10 @@ export const deleteActivity = createAsyncThunk('activities/delete', async (id) =
   await api.delete(`/${id}`);
   return id;
 });
+export const editActivity = createAsyncThunk('activities/edit', async ({ id, updates }) => {
+  const res = await api.put(`/${id}`, updates);
+  return res.data;
+});
 
 const slice = createSlice({
   name: 'activities',
@@ -31,7 +35,11 @@ const slice = createSlice({
       // delete
       .addCase(deleteActivity.pending, (state) => { state.status = 'loading'; state.error = null; })
       .addCase(deleteActivity.fulfilled, (state, action) => { state.items = state.items.filter(i => i.id !== action.payload); state.status = 'succeeded'; })
-      .addCase(deleteActivity.rejected, (state, action) => { state.status = 'failed'; state.error = action.error ? action.error.message : 'Failed to delete activity'; });
+      .addCase(deleteActivity.rejected, (state, action) => { state.status = 'failed'; state.error = action.error ? action.error.message : 'Failed to delete activity'; })
+      // edit
+      .addCase(editActivity.pending, (state) => { state.status = 'loading'; state.error = null; })
+      .addCase(editActivity.fulfilled, (state, action) => { const idx = state.items.findIndex(i => i.id === action.payload.id); if (idx >= 0) state.items[idx] = action.payload; state.status = 'succeeded'; })
+      .addCase(editActivity.rejected, (state, action) => { state.status = 'failed'; state.error = action.error ? action.error.message : 'Failed to update activity'; });
   }
 });
 // selectors

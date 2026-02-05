@@ -20,7 +20,7 @@ function activitiesForDay(activities, dateObj) {
   });
 }
 
-export default function WeekView({ weekStart, activities = [], onPrev, onNext, onDelete }) {
+export default function WeekView({ weekStart, activities = [], onPrev, onNext, onDelete, onEdit }) {
   const days = getWeekDays(weekStart);
   return (
     <section className={styles.listCard}>
@@ -40,7 +40,7 @@ export default function WeekView({ weekStart, activities = [], onPrev, onNext, o
               <div className={styles.dayTitle}>{format(d, 'EEE d')}</div>
               <ul className={styles.dayColumnList}>
                 {items.length === 0 ? <li className={styles.empty}>No activities</li> :
-                  items.map(a => <ActivityItem key={a.id} activity={a} onDelete={onDelete} />)
+                  items.map(a => <ActivityItem key={a.id} activity={a} onDelete={onDelete} onEdit={onEdit} />)
                 }
               </ul>
             </div>

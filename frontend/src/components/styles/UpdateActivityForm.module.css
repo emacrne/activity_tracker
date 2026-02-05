@@ -1,0 +1,73 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.title {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+}
+
+.error {
+  color: #b71c1c;
+  margin-bottom: 10px;
+  padding: 8px;
+  background: #ffe6e6;
+  border-radius: 4px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.input, .textarea {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.textarea { min-height: 70px; }
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btnCancel {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+}
+
+.btnUpdate {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #0066cc;
+  color: #fff;
+  border: none;
+}
+
+.btnUpdate:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

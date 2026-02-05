@@ -1,21 +1,22 @@
 package com.example.activity_backend.dto;
 
 import jakarta.validation.constraints.*;
+import org.springframework.lang.Nullable;
 import java.time.LocalDate;
 
 public class ActivityDto {
   private Long id;
 
-  @NotBlank(message = "Name is required")
+  @Nullable
   private String name;
 
+  @Nullable
   private String description;
 
-  @NotNull(message = "Date is required")
+  @Nullable
   private LocalDate date;
 
-  @NotNull(message = "Duration is required")
-  @DecimalMin(value = "0.01", message = "Duration must be positive")
+  @Nullable
   private Double durationHours;
 
   public ActivityDto() {

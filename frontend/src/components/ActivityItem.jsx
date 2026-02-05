@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles/ActivityItem.module.css';
 
-export default React.memo(function ActivityItem({ activity, onDelete }) {
+export default React.memo(function ActivityItem({ activity, onDelete, onEdit }) {
   const hoursText = (() => {
     const raw = activity.durationHours ?? (activity.durationMinutes ? activity.durationMinutes / 60 : null);
     if (raw === null || raw === undefined) return '';
@@ -20,6 +20,12 @@ export default React.memo(function ActivityItem({ activity, onDelete }) {
       {activity.description && <div className={styles.desc}>{activity.description}</div>}
 
       <div className={styles.actions}>
+        <button className={styles.delete} aria-label="Edit activity" onClick={() => onEdit(activity)} title="Edit">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" />
+            <path d="M20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+          </svg>
+        </button>
         <button className={styles.delete} aria-label="Delete activity" onClick={() => onDelete(activity.id)}>
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="3 6 5 6 21 6" />

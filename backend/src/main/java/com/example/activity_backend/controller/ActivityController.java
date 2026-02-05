@@ -36,19 +36,37 @@ public class ActivityController {
   }
 
   @PostMapping
-  public ResponseEntity<ActivityDto> create(@Valid @RequestBody ActivityDto dto) {
+  public ResponseEntity<ActivityDto> create(@RequestBody ActivityDto dto) {
+    // Validate required fields for creation
+    if (dto.getName() == null || dto.getName().isBlank())
+      return ResponseEntity.badRequest().build();
+    if (dto.getDate() == null)
+      return ResponseEntity.badRequest().build();
+    if (dto.getDurationHours() == null || dto.getDurationHours() <= 0)
+      return ResponseEntity.badRequest().build();
+
     Activity toSave = ActivityMapper.toEntity(dto);
     Activity saved = svc.save(toSave);
     return ResponseEntity.status(HttpStatus.CREATED).body(ActivityMapper.toDto(saved));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ActivityDto> update(@PathVariable Long id, @Valid @RequestBody ActivityDto dto) {
+  public ResponseEntity<ActivityDto> update(@PathVariable Long id, @RequestBody ActivityDto dto) {
     Activity existing = svc.findById(id);
     if (existing == null)
       return ResponseEntity.notFound().build();
-    dto.setId(id);
-    Activity updated = svc.save(ActivityMapper.toEntity(dto));
+
+    // Merge only provided (non-null) fields
+    if (dto.getName() != null && !dto.getName().isBlank())
+      existing.setName(dto.getName());
+    if (dto.getDescription() != null)
+      existing.setDescription(dto.getDescription());
+    if (dto.getDate() != null)
+      existing.setDate(dto.getDate());
+    if (dto.getDurationHours() != null && dto.getDurationHours() > 0)
+      existing.setDurationHours(dto.getDurationHours());
+
+    Activity updated = svc.save(existing);
     return ResponseEntity.ok(ActivityMapper.toDto(updated));
   }
 
