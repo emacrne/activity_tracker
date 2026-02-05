@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styles from './styles/ActivityForm.module.css';
 
-export default function ActivityForm({ onAdd }) {
+export default function ActivityForm({ onAdd, status }) {
   const [form, setForm] = useState({ name: '', description: '', date: '', durationHours: '' });
   const [error, setError] = useState('');
-  const [status, setStatus] = useState('idle');
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -14,7 +13,6 @@ export default function ActivityForm({ onAdd }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    setStatus('loading');
     if (!form.name || !form.date || form.durationHours === '' || form.durationHours === null) {
       setError('Name, date and duration are required.');
       return;
@@ -27,7 +25,6 @@ export default function ActivityForm({ onAdd }) {
     const payload = { ...form, durationHours: raw };
     await onAdd(payload);
     setForm({ name: '', description: '', date: '', durationHours: '' });
-    setStatus('idle');
   }
 
   return (
@@ -52,7 +49,7 @@ export default function ActivityForm({ onAdd }) {
         </label>
 
         <div className={styles.formActions}>
-          <button type="submit" disabled={status === 'loading'} className={styles.btnUpdate}>Add</button>
+          <button type="submit" disabled={status === 'loading'}>Add</button>
         </div>
       </form>
     </section>

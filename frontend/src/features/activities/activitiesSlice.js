@@ -5,10 +5,17 @@ export const fetchActivities = createAsyncThunk('activities/fetch', async () => 
   const res = await api.get('');
   return res.data;
 });
-export const addActivity = createAsyncThunk('activities/add', async (payload) => {
-  const res = await api.post('', payload);
-  return res.data;
-});
+export const addActivity = createAsyncThunk(
+  'activities/add',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const res = await api.post('', payload);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || 'Failed to add activity');
+    }
+  }
+);
 export const deleteActivity = createAsyncThunk('activities/delete', async (id) => {
   await api.delete(`/${id}`);
   return id;
@@ -31,7 +38,10 @@ const slice = createSlice({
       // add
       .addCase(addActivity.pending, (state) => { state.status = 'loading'; state.error = null; })
       .addCase(addActivity.fulfilled, (state, action) => { state.items.push(action.payload); state.status = 'succeeded'; })
-      .addCase(addActivity.rejected, (state, action) => { state.status = 'failed'; state.error = action.error ? action.error.message : 'Failed to add activity'; })
+      .addCase(addActivity.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || action.error.message || 'Failed to add activity';
+      })
       // delete
       .addCase(deleteActivity.pending, (state) => { state.status = 'loading'; state.error = null; })
       .addCase(deleteActivity.fulfilled, (state, action) => { state.items = state.items.filter(i => i.id !== action.payload); state.status = 'succeeded'; })

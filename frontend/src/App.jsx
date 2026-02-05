@@ -58,7 +58,7 @@ export default function App() {
       </main>
 
       {editingActivity && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+        <div className="modalOverlay">
           <UpdateActivityForm activity={editingActivity} onUpdate={handleUpdate} onCancel={handleCancelEdit} status={status} />
         </div>
       )}

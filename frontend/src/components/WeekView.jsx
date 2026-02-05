@@ -1,5 +1,4 @@
-import React from 'react';
-import { startOfWeek, addDays, format, parseISO } from 'date-fns';
+import { startOfWeek, addDays, format } from 'date-fns';
 import ActivityItem from './ActivityItem';
 import styles from './styles/WeekView.module.css';
 
@@ -10,14 +9,7 @@ function getWeekDays(baseDate) {
 
 function activitiesForDay(activities, dateObj) {
   const dayStr = format(dateObj, 'yyyy-MM-dd');
-  return activities.filter(a => {
-    if (!a.date) return false;
-    try {
-      return format(parseISO(a.date), 'yyyy-MM-dd') === dayStr;
-    } catch {
-      return a.date === dayStr;
-    }
-  });
+  return activities.filter(a => a.date === dayStr);
 }
 
 export default function WeekView({ weekStart, activities = [], onPrev, onNext, onDelete, onEdit }) {
