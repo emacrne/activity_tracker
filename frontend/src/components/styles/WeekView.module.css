@@ -1,0 +1,51 @@
+.listCard{
+  height: 75vh;
+  width: 100%;
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:var(--pad);
+  box-shadow:0 6px 18px rgba(15,23,42,0.06)
+}
+.weekHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+  gap:8px
+}
+.weekTitle{
+  font-weight:600
+}
+.weekGrid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px;
+  align-items:start;
+  height:100%
+}
+.dayColumn{
+  display:flex;
+  flex-direction:column;
+  padding:8px;
+  border-radius:8px;
+  min-height:0;
+  border:1px dashed #eef2ff;
+  background:transparent
+}
+.dayTitle{
+  font-weight:600;
+  margin-bottom:8px;
+  font-size:13px;
+  color:#0f172a
+}
+.empty{
+  color:#9ca3af;
+  font-size:13px
+}
+.dayColumnList{
+  list-style:none;
+  padding:0;
+  margin:6px 0 0 0;
+  overflow:auto;
+  flex:1 1 auto
+}

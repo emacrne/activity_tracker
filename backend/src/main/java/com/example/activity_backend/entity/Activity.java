@@ -5,11 +5,15 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "activities")
+
 public class Activity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @Column(nullable = false)
+  private String name;
 
   private LocalDate date;
 
@@ -18,12 +22,13 @@ public class Activity {
   @Column(length = 2000)
   private String description;
 
-  private int durationMinutes;
+  private Integer durationMinutes;
 
   public Activity() {
   }
 
-  public Activity(LocalDate date, String type, String description, int durationMinutes) {
+  public Activity(String name, LocalDate date, String type, String description, Integer durationMinutes) {
+    this.name = name;
     this.date = date;
     this.type = type;
     this.description = description;
@@ -32,6 +37,14 @@ public class Activity {
 
   public Long getId() {
     return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public void setId(Long id) {
@@ -62,11 +75,11 @@ public class Activity {
     this.description = description;
   }
 
-  public int getDurationMinutes() {
+  public Integer getDurationMinutes() {
     return durationMinutes;
   }
 
-  public void setDurationMinutes(int durationMinutes) {
+  public void setDurationMinutes(Integer durationMinutes) {
     this.durationMinutes = durationMinutes;
   }
 }

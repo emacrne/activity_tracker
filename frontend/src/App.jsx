@@ -1,29 +1,47 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchActivities, addActivity, deleteActivity } from './features/activities/activitiesSlice';
+import React, { useEffect, useState } from 'react';
+import api from './api/activitiesApi';
+import ActivityForm from './components/ActivityForm';
+import WeekView from './components/WeekView';
+import { addDays, startOfWeek } from 'date-fns';
+import './App.css';
 
 export default function App() {
-  const dispatch = useDispatch();
-  const list = useSelector(state => state.activities.list);
-  const [form,setForm] = useState({ date: new Date().toISOString().slice(0,10), type:'', description:'', durationMinutes:0 });
+  const [activities, setActivities] = useState([]);
+  const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [loading, setLoading] = useState(false);
 
-  useEffect(()=> { dispatch(fetchActivities()); }, [dispatch]);
+  async function fetchAll() {
+    setLoading(true);
+    try {
+      const res = await api.get('');
+      setActivities(res.data);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  const handleAdd = () => {
-    dispatch(addActivity(form));
-    setForm({...form, type:'', description:'', durationMinutes:0});
-  };
-  const handleDelete = (id) => dispatch(deleteActivity(id));
+  useEffect(() => { fetchAll(); }, []);
+
+  async function handleAdd(payload) {
+    await api.post('', payload);
+    await fetchAll();
+  }
+
+  async function handleDelete(id) {
+    await api.delete(`/${id}`);
+    await fetchAll();
+  }
+
+  function prevWeek() { setWeekStart(ws => addDays(ws, -7)); }
+  function nextWeek() { setWeekStart(ws => addDays(ws, 7)); }
 
   return (
-    <div>
-      <h1>Activities</h1>
-      <ul>{list.map(a => <li key={a.id}>{a.date} — {a.type} <button onClick={()=>handleDelete(a.id)}>Delete</button></li>)}</ul>
-      <input type="date" value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/>
-      <input value={form.type} onChange={e=>setForm({...form,type:e.target.value})} placeholder="type" />
-      <input type="number" value={form.durationMinutes} onChange={e=>setForm({...form,durationMinutes:+e.target.value})} />
-      <input value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="desc" />
-      <button onClick={handleAdd}>Add</button>
+    <div className="app">
+      <header><h1>Activity Tracker</h1></header>
+      <main>
+        <ActivityForm onAdd={handleAdd} />
+        <WeekView weekStart={weekStart} activities={activities} onPrev={prevWeek} onNext={nextWeek} onDelete={handleDelete} />
+      </main>
     </div>
   );
 }

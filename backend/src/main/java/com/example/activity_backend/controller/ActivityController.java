@@ -1,11 +1,16 @@
 package com.example.activity_backend.controller;
 
+import com.example.activity_backend.dto.ActivityDto;
 import com.example.activity_backend.entity.Activity;
+import com.example.activity_backend.mapper.ActivityMapper;
 import com.example.activity_backend.service.ActivityService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -18,32 +23,33 @@ public class ActivityController {
   }
 
   @GetMapping
-  public List<Activity> all() {
-    return svc.findAll();
+  public List<ActivityDto> all() {
+    return svc.findAll().stream().map(ActivityMapper::toDto).collect(Collectors.toList());
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Activity> get(@PathVariable Long id) {
+  public ResponseEntity<ActivityDto> get(@PathVariable Long id) {
     Activity a = svc.findById(id);
     if (a == null)
       return ResponseEntity.notFound().build();
-    return ResponseEntity.ok(a);
+    return ResponseEntity.ok(ActivityMapper.toDto(a));
   }
 
   @PostMapping
-  public ResponseEntity<Activity> create(@RequestBody Activity activity) {
-    Activity saved = svc.save(activity);
-    return ResponseEntity.ok(saved);
+  public ResponseEntity<ActivityDto> create(@Valid @RequestBody ActivityDto dto) {
+    Activity toSave = ActivityMapper.toEntity(dto);
+    Activity saved = svc.save(toSave);
+    return ResponseEntity.status(HttpStatus.CREATED).body(ActivityMapper.toDto(saved));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Activity> update(@PathVariable Long id, @RequestBody Activity activity) {
+  public ResponseEntity<ActivityDto> update(@PathVariable Long id, @Valid @RequestBody ActivityDto dto) {
     Activity existing = svc.findById(id);
     if (existing == null)
       return ResponseEntity.notFound().build();
-    activity.setId(id);
-    Activity updated = svc.save(activity);
-    return ResponseEntity.ok(updated);
+    dto.setId(id);
+    Activity updated = svc.save(ActivityMapper.toEntity(dto));
+    return ResponseEntity.ok(ActivityMapper.toDto(updated));
   }
 
   @DeleteMapping("/{id}")
